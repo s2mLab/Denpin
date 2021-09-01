@@ -114,9 +114,9 @@ for iT = 1:length(trials)
         for iD = 1:nDofToShow
             figure
             ax(iD) = axes();
-            title(sprintf('%s - %s', trial, models(1).dofToShowNames{iD}))
+            title(sprintf('%s - %s', trial, models(1).dofToShowNames{dofToPlot(iD)}))
             xlabel('Time (%)');
-            ylabel(sprintf('Error (%s)', models(1).dofToShowYLabel{iD}))
+            ylabel(sprintf('Error (%s)', models(1).dofToShowYLabel{dofToPlot(iD)}))
             hold on
         end
         if length(models) ~= 2
@@ -135,7 +135,7 @@ for iT = 1:length(trials)
             spm = spm1d.stats.nonparam.ttest_paired(data1, data2);
             spmi = spm.inference(0.05, 'two_tailed', true, 'interp',true, 'iterations', 1000);
 
-            stdshade(abs(data2 - data1) * models(1).dofToShowFactor{iD}, 0.1, models(iM).color, t);
+            stdshade(abs(data2 - data1) * models(1).dofToShowFactor{dofToPlot(iD)}, 0.1, models(iM).color, t);
 
             axes(ax(iD)); %#ok<LAXES>
             lim = ylim();

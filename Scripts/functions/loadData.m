@@ -1,4 +1,4 @@
-function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames, nRep, subjects, models)
+function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames, nRep, subjects, models, resetToZero)
     warningWritten = false;
     allQ = nan(nDofToShow, nFrames, nRep, length(subjects), length(models));
     for iS = 1:length(subjects)
@@ -69,7 +69,9 @@ function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames,
                     warningWritten = true;
                 end
                 dof = strfind(models(iM).rotSeqOut{2}, 'x');
-                if strcmp(subjects(iS).name, 'Subject8')
+                if strcmp(subjects(iS).name, 'Subject1')
+                    [~, idxPeaks] = findpeaks(Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 175);
+                elseif strcmp(subjects(iS).name, 'Subject8')
                     [~, idxPeaks] = findpeaks(Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 300);
                 else
                     [~, idxPeaks] = findpeaks(Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 200);
@@ -104,7 +106,11 @@ function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames,
                     warningWritten = true;
                 end
                 dof = strfind(models(iM).rotSeqOut{2}, 'x');
-                [~, idxPeaks] = findpeaks(Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 250);
+                if strcmp(subjects(iS).name, 'Subject3')
+                    [~, idxPeaks] = findpeaks(Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 300);
+                else
+                    [~, idxPeaks] = findpeaks(Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 250);
+                end
                 idxPeaks = idxPeaks(idxPeaks > 300 & idxPeaks < size(Q, 2) - 300);
 
             elseif strcmp(trial, 'Jerk')
@@ -137,7 +143,11 @@ function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames,
                 dof = strfind(models(iM).rotSeqOut{2}, 'y');
                 [~, idxPeaksMax] = findpeaks(-Q(models(iM).GHrot(dof), :), 'MinPeakDistance', 100);
                 idxPeaksMax = idxPeaksMax(idxPeaksMax > 200 & idxPeaksMax < size(Q, 2) - 200);
-                idxPeaksMax = idxPeaksMax(Q(models(iM).GHrot(dof), idxPeaksMax) < -1);
+                if strcmp(subjects(iS).name, 'Subject3')
+                    idxPeaksMax = idxPeaksMax(Q(models(iM).GHrot(dof), idxPeaksMax) < -0.6);
+                else
+                    idxPeaksMax = idxPeaksMax(Q(models(iM).GHrot(dof), idxPeaksMax) < -1);
+                end
                 
                 % Find peak at middle point between two max
                 n = 100;
@@ -213,7 +223,23 @@ function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames,
                 end
             elseif strcmp(subjects(iS).name, 'Subject8') && ...
                     strcmp(trial, 'ABER') && strcmp(models(iM).folder, 'SkinAndBrace')
-                fprintf('Subject8 did only four Scaption in SkinAndBrace\n');
+                fprintf('Subject8 did only four ABER in SkinAndBrace\n');
+                if nRep >= 5
+                    idxPeaks = idxPeaks(1:5);
+                else
+                    idxPeaks = idxPeaks(1:nRep + 1);
+                end
+            elseif strcmp(subjects(iS).name, 'Subject6') && ...
+                    strcmp(trial, 'ABER') && strcmp(models(iM).folder, 'SkinAndBrace')
+                fprintf('Subject3 did only four ABER in SkinAndBrace\n');
+                if nRep >= 5
+                    idxPeaks = idxPeaks(1:5);
+                else
+                    idxPeaks = idxPeaks(1:nRep + 1);
+                end
+            elseif strcmp(subjects(iS).name, 'Subject6') && ...
+                    strcmp(trial, 'Flex') && strcmp(models(iM).folder, 'SkinAndBrace')
+                fprintf('Subject3 did only four Flex in SkinAndBrace\n');
                 if nRep >= 5
                     idxPeaks = idxPeaks(1:5);
                 else
@@ -232,6 +258,9 @@ function allQ = loadData(resultsFolder, trial, reconstType, nDofToShow, nFrames,
             % Time normalisation
             for iT = 1:length(idxPeaks) - 1
                 tp = Q(:, idxPeaks(iT):idxPeaks(iT+1));
+                if resetToZero
+                    tp = tp - tp(:, 1);  % Reset initial frame to zero
+                end
                 allQ(:, :, iT, iS, iM) = ...
                     interp1(linspace(0, 1, size(tp, 2)), tp', linspace(0, 1, nFrames), 'spline')';
             end

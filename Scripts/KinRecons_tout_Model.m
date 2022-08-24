@@ -1,24 +1,24 @@
 clear;
 close all
 clc
-addpath(genpath('/home/pariterre/Programmation/CAST/Functions'));
+addpath(genpath('../Functions'));
 
 % Options
-showRecons = true; % true => montre la reconstruction en temps reel; false => ne montre rien
-saveResults = false; % true => enregistre les resultats 
+showRecons = false; % true => montre la reconstruction en temps reel; false => ne montre rien
+saveResults = true; % true => enregistre les resultats 
 reconsAlgo = 'kalman'; % QLD; kalman; 
 useOldRecons = true; % true => Ne reconstruit pas ce qui est deja reconstruit
 folderNameToSave = 'CAST'; % Nom de la personne qui utilise ce script
 
 % Tous les pseudo, 
-	pseudos = {'Subject2', 'Subject4', 'Subject7', 'Subject8',}; % 'Subject1', 'Subject3', 'Subject5', 'Subject6'
+	pseudos = {'Subject1', 'Subject2', 'Subject3', 'Subject4', 'Subject5', 'Subject6', 'Subject7', 'Subject8', };
 
 % Tous les dossiers a reconstruire, 
 	% si vide ou inexistant, la reconstruction se fait sur tous les dossiers
- 	subfolders = {'PreSurgery', 'SkinAndBrace', 'Brace'}; 
+ 	subfolders = {'SkinAndBrace'};  % 'PreSurgery', 'SkinAndBrace', 'Brace', }; 
     
 % Num�ro du mod�le
-	modelnumbers = {[1.0 1.1 1.2 1.3 1.4 1.5], [1.0, 1.1, 1.2, 1.3 1.4 1.5 2.0], [2.0 3.0]};
+	modelnumbers = {[101.1, 102]};  % [1.0 1.1 1.2 1.3 1.4 1.5], [1.0, 1.1, 1.2, 1.3 1.4 1.5 2.0], [2.0 3.0]};
 
 
 

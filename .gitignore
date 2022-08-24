@@ -1,5 +1,8 @@
-Data/
-Results
+Data
+[Rr]esults
 *.png
 *.zip
 *.asv
+*.csv
+
+*DS_Store

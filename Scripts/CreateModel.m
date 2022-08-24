@@ -5,11 +5,11 @@ addpath(genpath('/home/pariterre/Programmation/CAST/Functions'));
 
 models = {'Subject1' 'Subject2' 'Subject3' 'Subject4' 'Subject5' 'Subject6' 'Subject7' 'Subject8'};
 subfolders = {'PreSurgery', 'SkinAndBrace', 'Brace'};
-modelnumbers = {1, [1 2 12 21], [2 3 23 32]};
-models = {'Subject5'};
+modelnumbers = {1, [1 2 12 21 101 102], [2 3 23 32]};
+% models = {'Subject1'}; % 'Subject2' 'Subject3' 'Subject4' 'Subject5' 'Subject6' 'Subject7' 'Subject8'};
 subfolders = {'SkinAndBrace'};
-modelnumbers = {[2]};
-DName = '/home/pariterre/Programmation/CAST/Data/config';
+modelnumbers = {[101 102]};
+DName = '/home/pariterre/Programmation/Denpin/Data/config';
 
 for iModel = 1:length(models)
     for iSub = 1:length(subfolders)

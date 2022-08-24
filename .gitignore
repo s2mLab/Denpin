@@ -1,5 +1,6 @@
 Data/
-Results
+[Rr]esults
 *.png
 *.zip
 *.asv
+*.csv
